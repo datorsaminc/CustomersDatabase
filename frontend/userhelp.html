@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers Database - User Manual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .manual-header { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 3rem 0; margin-bottom: 2rem; }
+        .section-title { border-left: 4px solid #0d6efd; padding-left: 1rem; margin-top: 2.5rem; margin-bottom: 1.5rem; }
+        .step-list { counter-reset: step; list-style: none; padding-left: 0; }
+        .step-list li { counter-increment: step; position: relative; padding-left: 3rem; margin-bottom: 1.5rem; }
+        .step-list li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background-color: #0d6efd; color: white; border-radius: 50%; text-align: center; line-height: 2rem; font-weight: bold; }
+        .tip-box { background-color: #e8f4fd; border-left: 4px solid #0d6efd; padding: 1rem 1.5rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .warning-box { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem 1.5rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .field-table th { background-color: #f1f3f5; }
+        .nav-sidebar { position: sticky; top: 2rem; }
+        code { background-color: #e9ecef; padding: 0.2em 0.4em; border-radius: 0.25rem; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="manual-header">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Customers Database</h1>
+        <p class="lead">User Manual &mdash; Complete Guide to Managing Customer Records</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 d-none d-lg-block">
+            <nav class="nav-sidebar card">
+                <div class="card-body">
+                    <h6 class="card-title fw-bold mb-3">Table of Contents</h6>
+                    <ul class="nav flex-column nav-pills">
+                        <li class="nav-item"><a class="nav-link" href="#introduction">1. Introduction</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#getting-started">2. Getting Started</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#main-screen">3. Main Screen Overview</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#searching">4. Searching Customers</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#browsing">5. Browsing & Pagination</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#adding">6. Adding a Customer</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#editing">7. Editing a Customer</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#deleting">8. Deleting a Customer</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#validation">9. Form Validation</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#fields">10. Data Fields Reference</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+
+            <!-- 1. Introduction -->
+            <section id="introduction">
+                <h2 class="section-title">1. Introduction</h2>
+                <p>The <strong>Customers Database</strong> is a web-based application designed to manage customer records for the software company. It provides a clean, intuitive interface for viewing, searching, creating, editing, and deleting customer entries.</p>
+                <p>This system was built to replace manual Excel-based tracking with a modern web application that offers:</p>
+                <ul>
+                    <li><strong>Real-time full-text search</strong> across all customer fields</li>
+                    <li><strong>Complete CRUD operations</strong> (Create, Read, Update, Delete)</li>
+                    <li><strong>Pagination</strong> for efficient browsing of large datasets</li>
+                    <li><strong>License tracking</strong> showing total licenses sold across all customers</li>
+                    <li><strong>Responsive design</strong> that works on desktop and mobile devices</li>
+                </ul>
+            </section>
+
+            <!-- 2. Getting Started -->
+            <section id="getting-started">
+                <h2 class="section-title">2. Getting Started</h2>
+                <p>To access the Customers Database application:</p>
+                <ol class="step-list">
+                    <li>Ensure the server is running (ask your system administrator if you are unsure).</li>
+                    <li>Open your web browser (Chrome, Firefox, or Edge recommended).</li>
+                    <li>Navigate to <code>http://localhost:8080</code></li>
+                    <li>The main customer list page will load automatically.</li>
+                </ol>
+                <div class="tip-box">
+                    <strong>&#128161; Tip:</strong> If the page does not load, verify that the server is running by checking with your administrator. The application runs on port 8080 by default.
+                </div>
+            </section>
+
+            <!-- 3. Main Screen Overview -->
+            <section id="main-screen">
+                <h2 class="section-title">3. Main Screen Overview</h2>
+                <p>The main screen is organized into several key areas:</p>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">A. Search Bar (Top Left)</div>
+                    <div class="card-body">
+                        <p>A large text input field where you can type to search across all customer fields. Includes a clear button (&times;) to reset the search.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">B. Add Customer Button (Top Right)</div>
+                    <div class="card-body">
+                        <p>The <strong>"+ Add Customer"</strong> button opens a modal form for creating a new customer record.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">C. License Summary</div>
+                    <div class="card-body">
+                        <p>A summary card showing the <strong>Total Licenses Sold</strong> across all customers in the database.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">D. Results Count</div>
+                    <div class="card-body">
+                        <p>Displays text like "Showing <em>X</em> of <em>Y</em> customers" indicating the current page count and total records.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">E. Customer Table (Center)</div>
+                    <div class="card-body">
+                        <p>The main data table displaying customer records with the following columns:</p>
+                        <table class="table table-sm table-bordered">
+                            <thead><tr><th>Column</th><th>Description</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Company</strong></td><td>The company name (clickable column header for sorting)</td></tr>
+                                <tr><td><strong>Contact Name</strong></td><td>Primary contact name with optional secondary contact shown below</td></tr>
+                                <tr><td><strong>Email</strong></td><td>The customer's email address</td></tr>
+                                <tr><td><strong>Phone</strong></td><td>Landline phone number with optional mobile shown below</td></tr>
+                                <tr><td><strong>City</strong></td><td>Postal code and city</td></tr>
+                                <tr><td><strong>Licenses</strong></td><td>Number of licenses associated with this customer</td></tr>
+                                <tr><td><strong>Actions</strong></td><td>Edit (&#9998;) and Delete (&#128465;) buttons for each record</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">F. Pagination Controls (Bottom)</div>
+                    <div class="card-body">
+                        <p>Navigation controls for browsing through pages of 50 customer records each. Includes Previous, page numbers, and Next buttons.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Searching Customers -->
+            <section id="searching">
+                <h2 class="section-title">4. Searching Customers</h2>
+                <p>The search feature allows you to quickly find customers by typing any keyword or phrase.</p>
+
+                <h5 class="mt-3">How Search Works</h5>
+                <ul>
+                    <li>Type your search term in the search bar at the top of the page.</li>
+                    <li>Results update automatically after a brief pause (300ms) as you type &mdash; no need to press Enter.</li>
+                    <li>Search is <strong>case-insensitive</strong>, so "abb", "ABB", and "Abb" all produce the same results.</li>
+                    <li>The search scans <strong>all text fields</strong>: company name, contact names, email, phone numbers, addresses, program version, delivery date, and comments.</li>
+                </ul>
+
+                <h5 class="mt-3">Clearing Search</h5>
+                <p>Click the <strong>&times;</strong> button on the right side of the search bar to clear your search and show all customers again. You can also simply delete the text manually.</p>
+
+                <div class="tip-box">
+                    <strong>&#128161; Tip:</strong> When you start a new search, the application automatically resets to page 1 so you see the most relevant results immediately.
+                </div>
+
+                <h5 class="mt-3">Search Examples</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>Search Term</th><th>What It Finds</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>ABB</code></td><td>All customers with "ABB" in their company name, email, or any other field</td></tr>
+                        <tr><td><code>stefan</code></td><td>All customers whose contact name contains "stefan"</td></tr>
+                        <tr><td><code>Stockholm</code></td><td>All customers located in Stockholm (searches postal code & city field)</td></tr>
+                        <tr><td><code>@abb.com</code></td><td>All customers with an ABB email domain</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 5. Browsing and Pagination -->
+            <section id="browsing">
+                <h2 class="section-title">5. Browsing & Pagination</h2>
+                <p>The customer table displays up to <strong>50 records per page</strong>. When there are more results than fit on one page, pagination controls appear at the bottom of the table.</p>
+
+                <h5 class="mt-3">Using Pagination Controls</h5>
+                <ul>
+                    <li><strong>Previous</strong> &mdash; Go to the previous page (disabled on page 1).</li>
+                    <li><strong>Page Numbers</strong> &mdash; Click any visible page number to jump directly to that page. A sliding window of up to 5 pages is shown at a time, with ellipsis (&hellip;) for gaps.</li>
+                    <li><strong>Next</strong> &mdash; Go to the next page (disabled on the last page).</li>
+                </ul>
+
+                <h5 class="mt-3">Sorting Columns</h5>
+                <p>Click the column headers for <strong>Company</strong>, <strong>Contact Name</strong>, <strong>Email</strong>, <strong>Phone</strong>, or <strong>City</strong> to sort the table by that column. The arrows (&#x25B4;&#x25BE;) indicate sortable columns.</p>
+
+                <div class="tip-box">
+                    <strong>&#128161; Tip:</strong> Combine search with sorting for precise results &mdash; first narrow down with a search term, then sort by company or name.
+                </div>
+            </section>
+
+            <!-- 6. Adding a Customer -->
+            <section id="adding">
+                <h2 class="section-title">6. Adding a New Customer</h2>
+                <ol class="step-list">
+                    <li>Click the <strong>"+ Add Customer"</strong> button in the top-right corner of the page.</li>
+                    <li>The "Add New Customer" modal form will open with all fields empty.</li>
+                    <li>Fill in the required fields (marked with an asterisk <strong>*</strong>):
+                        <ul>
+                            <li><strong>Company</strong> &mdash; The customer's company name (minimum 2 characters)</li>
+                            <li><strong>Primary Contact</strong> &mdash; Main contact person's name (minimum 2 characters)</li>
+                        </ul>
+                    </li>
+                    <li>Optionally fill in any additional fields such as email, phone numbers, addresses, program version, delivery date, licenses, and comments.</li>
+                    <li>Click the <strong>"Save Customer"</strong> button at the bottom of the form.</li>
+                    <li>A success notification will appear briefly in the bottom-right corner. The customer table refreshes automatically to show the new record.</li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>&#9888; Note:</strong> If required fields are missing or invalid, red error messages will appear below those fields. Correct the errors before saving.
+                </div>
+            </section>
+
+            <!-- 7. Editing a Customer -->
+            <section id="editing">
+                <h2 class="section-title">7. Editing an Existing Customer</h2>
+                <ol class="step-list">
+                    <li>Locate the customer you want to edit in the table (use search if needed).</li>
+                    <li>Click the <strong>&#9998; Edit</strong> button (pencil icon) in the Actions column of that row.</li>
+                    <li>The "Edit Customer" modal form will open, pre-filled with the customer's current data.</li>
+                    <li>Modify any fields as needed. Only Company and Primary Contact are required.</li>
+                    <li>Click <strong>"Save Customer"</strong> to apply your changes.</li>
+                    <li>A success notification appears and the table refreshes automatically.</li>
+                </ol>
+
+                <div class="tip-box">
+                    <strong>&#128161; Tip:</strong> Clicking "Cancel" or the close button (X) on the modal will discard any unsaved changes.
+                </div>
+            </section>
+
+            <!-- 8. Deleting a Customer -->
+            <section id="deleting">
+                <h2 class="section-title">8. Deleting a Customer</h2>
+                <ol class="step-list">
+                    <li>Locate the customer you want to delete in the table.</li>
+                    <li>Click the <strong>&#128465; Delete</strong> button (trash icon) in the Actions column of that row.</li>
+                    <li>A confirmation dialog will appear showing the company name and contact person. This prevents accidental deletions.</li>
+                    <li>Click <strong>"Delete"</strong> to confirm, or <strong>"Cancel"</strong> to abort.</li>
+                    <li>If confirmed, a success notification appears and the table refreshes automatically.</li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>&#9888; Warning:</strong> Deleting a customer is permanent and cannot be undone. Always confirm the correct record before clicking Delete in the confirmation dialog.
+                </div>
+            </section>
+
+            <!-- 9. Form Validation -->
+            <section id="validation">
+                <h2 class="section-title">9. Form Validation Rules</h2>
+                <p>The application validates form input before saving to ensure data quality:</p>
+                <table class="table table-bordered field-table">
+                    <thead>
+                        <tr><th>Field</th><th>Rule</th><th>Error Message</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Company</strong></td>
+                            <td>Required, minimum 2 characters</td>
+                            <td>"Please provide a valid company name."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Primary Contact</strong></td>
+                            <td>Required, minimum 2 characters</td>
+                            <td>"Please provide a valid contact name."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email</strong></td>
+                            <td>Optional, but must be valid email format if provided</td>
+                            <td>"Please provide a valid email address."</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>When validation fails, the invalid fields are highlighted in red and error messages appear below them. The form will not submit until all required fields pass validation.</p>
+            </section>
+
+            <!-- 10. Data Fields Reference -->
+            <section id="fields">
+                <h2 class="section-title">10. Customer Data Fields Reference</h2>
+                <p>The following table describes every field available in the customer form:</p>
+                <table class="table table-bordered field-table">
+                    <thead>
+                        <tr><th>Field Name</th><th>Required</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Company</strong></td><td>Yes *</td><td>The customer's company or organization name.</td></tr>
+                        <tr><td><strong>Primary Contact</strong></td><td>Yes *</td><td>Main contact person at the customer's company (Namn 1).</td></tr>
+                        <tr><td><strong>Secondary Contact</strong></td><td>No</td><td>Additional contact person (Namn 2).</td></tr>
+                        <tr><td><strong>Email</strong></td><td>No</td><td>The primary email address for the customer.</td></tr>
+                        <tr><td><strong>Program Version</strong></td><td>No</td><td>Software version(s) owned by this customer (e.g., "Netkoll 8.7").</td></tr>
+                        <tr><td><strong>Delivery Date</strong></td><td>No</td><td>Date when the software was delivered.</td></tr>
+                        <tr><td><strong>Licenses</strong></td><td>No</td><td>Number of licenses purchased by this customer.</td></tr>
+                        <tr><td><strong>Visit Address</strong></td><td>No</td><td>Physical address for visiting the customer (Bes&ouml;ksadress).</td></tr>
+                        <tr><td><strong>Mailing Address</strong></td><td>No</td><td>Address for postal correspondence (Brevadress).</td></tr>
+                        <tr><td><strong>Postal Code & City</strong></td><td>No</td><td>Postal code and city name combined (Postnr och ort).</td></tr>
+                        <tr><td><strong>Landline Phone</strong></td><td>No</td><td>Primary landline phone number.</td></tr>
+                        <tr><td><strong>Mobile Phone</strong></td><td>No</td><td>Mobile/cell phone number.</td></tr>
+                        <tr><td><strong>Fax Number</strong></td><td>No</td><td>Fax machine number.</td></tr>
+                        <tr><td><strong>Comments</strong></td><td>No</td><td>Free-text notes and comments about the customer (Kommentar).</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">&copy; 2024 Customers Database &mdash; User Manual v1.0</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

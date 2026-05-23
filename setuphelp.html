@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers Database - Setup Manual</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .manual-header { background: linear-gradient(135deg, #198754, #146c43); color: white; padding: 3rem 0; margin-bottom: 2rem; }
+        .section-title { border-left: 4px solid #198754; padding-left: 1rem; margin-top: 2.5rem; margin-bottom: 1.5rem; }
+        .step-list { counter-reset: step; list-style: none; padding-left: 0; }
+        .step-list li { counter-increment: step; position: relative; padding-left: 3rem; margin-bottom: 1.5rem; }
+        .step-list li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background-color: #198754; color: white; border-radius: 50%; text-align: center; line-height: 2rem; font-weight: bold; }
+        .tip-box { background-color: #e8f4fd; border-left: 4px solid #0d6efd; padding: 1rem 1.5rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .warning-box { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 1rem 1.5rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .danger-box { background-color: #f8d7da; border-left: 4px solid #dc3545; padding: 1rem 1.5rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        code { background-color: #e9ecef; padding: 0.2em 0.4em; border-radius: 0.25rem; font-size: 0.9em; }
+        pre { background-color: #212529; color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+        pre code { background-color: transparent; padding: 0; }
+        .nav-sidebar { position: sticky; top: 2rem; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="manual-header">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Customers Database</h1>
+        <p class="lead">Setup & Installation Manual &mdash; For System Administrators and Developers</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 d-none d-lg-block">
+            <nav class="nav-sidebar card">
+                <div class="card-body">
+                    <h6 class="card-title fw-bold mb-3">Table of Contents</h6>
+                    <ul class="nav flex-column nav-pills">
+                        <li class="nav-item"><a class="nav-link" href="#overview">1. System Overview</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#requirements">2. System Requirements</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#project-structure">3. Project Structure</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#installation">4. Installation Steps</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#building">5. Building the Server</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#running">6. Running the Application</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#configuration">7. Configuration</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#api-reference">8. API Endpoints Reference</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#troubleshooting">9. Troubleshooting</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+
+            <!-- 1. System Overview -->
+            <section id="overview">
+                <h2 class="section-title">1. System Overview</h2>
+                <p>The Customers Database is a full-stack web application consisting of:</p>
+                <ul>
+                    <li><strong>Backend:</strong> A Go-based REST API server using the chi router, with JSON file-based storage.</li>
+                    <li><strong>Frontend:</strong> A single-page web application built with jQuery 3.7.1 and Bootstrap 5.3.2.</li>
+                    <li><strong>Data Storage:</strong> JSON files (<code>customers.json</code> and <code>licenses.json</code>) served from the <code>backend/data/</code> directory.</li>
+                </ul>
+                <p>The server serves both the API endpoints (under <code>/api/</code>) and the static frontend files, making it a self-contained application that runs on a single port (default: 8080).</p>
+            </section>
+
+            <!-- 2. System Requirements -->
+            <section id="requirements">
+                <h2 class="section-title">2. System Requirements</h2>
+
+                <h5 class="mt-3">Server-Side (Backend)</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>Component</th><th>Minimum Version</th><th>Notes</th></tr></thead>
+                    <tbody>
+                        <tr><td>Operating System</td><td>Windows 10/11, Linux, macOS</td><td>Tested on Windows 11</td></tr>
+                        <tr><td>Go (Golang)</td><td>1.21+</td><td>Required for building the server binary</td></tr>
+                        <tr><td>RAM</td><td>512 MB free</td><td>In-memory data loading requires memory proportional to dataset size</td></tr>
+                        <tr><td>Disk Space</td><td>100 MB free</td><td>For source code, compiled binary, and data files</td></tr>
+                    </tbody>
+                </table>
+
+                <h5 class="mt-3">Client-Side (Browser)</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>Browser</th><th>Minimum Version</th></tr></thead>
+                    <tbody>
+                        <tr><td>Google Chrome</td><td>90+</td></tr>
+                        <tr><td>Mozilla Firefox</td><td>90+</td></tr>
+                        <tr><td>Microsoft Edge</td><td>90+</td></tr>
+                    </tbody>
+                </table>
+
+                <h5 class="mt-3">Verifying Go Installation</h5>
+                <pre><code>go version</code></pre>
+                <p>This should output something like <code>go version go1.21.x windows/amd64</code>. If Go is not installed, download it from <a href="https://go.dev/dl/" target="_blank">go.dev/dl/</a>.</p>
+            </section>
+
+            <!-- 3. Project Structure -->
+            <section id="project-structure">
+                <h2 class="section-title">3. Project Structure</h2>
+                <pre><code>ClientsWeb/
+├── setuphelp.html                      # Setup manual (this document)
+├── backend/
+│   ├── go.mod                          # Go module definition
+│   ├── go.sum                          # Dependency checksums
+│   ├── main.go                         # Application entry point
+│   ├── internal/
+│   │   ├── model/
+│   │   │   ├── customer.go             # Customer data model struct
+│   │   │   └── license.go              # License data model struct
+│   │   ├── store/
+│   │   │   ├── json_store.go           # Generic JSON file storage layer
+│   │   │   └── license_store.go        # License-specific storage
+│   │   ├── handler/
+│   │   │   └── customer_handler.go     # HTTP request handlers
+│   │   ├── service/
+│   │   │   └── customer_service.go     # Business logic layer
+│   │   └── search/
+│   │       └── searcher.go             # Full-text search implementation
+│   └── data/
+│       ├── customers.json              # Customer database (auto-created)
+│       └── licenses.json               # License database (auto-created)
+└── frontend/
+    ├── index.html                      # Main application page
+    ├── userhelp.html                   # User manual (this companion document)
+    ├── css/style.css                   # Custom styles
+    └── js/
+        ├── app.js                      # Application entry point
+        ├── api.js                      # API communication layer
+        ├── search.js                   # Search functionality (debounced)
+        ├── customerForm.js             # Form handling & validation
+        └── customerTable.js            # Table rendering & pagination</code></pre>
+            </section>
+
+            <!-- 4. Installation Steps -->
+            <section id="installation">
+                <h2 class="section-title">4. Installation Steps</h2>
+                <ol class="step-list">
+                    <li><strong>Obtain the source code.</strong> Ensure all files from the ClientsWeb project are present on your system, maintaining the directory structure shown above.</li>
+                    <li><strong>Verify Go is installed.</strong> Open a terminal and run:
+                        <pre><code>go version</code></pre>
+                        If this command fails, install Go 1.21+ from <a href="https://go.dev/dl/" target="_blank">go.dev/dl/</a>.
+                    </li>
+                    <li><strong>Download Go dependencies.</strong> Navigate to the backend directory and run:
+                        <pre><code>cd backend
+go mod download</code></pre>
+                        This downloads all required packages (chi router, uuid generator, etc.) as listed in <code>go.mod</code>.
+                    </li>
+                </ol>
+
+                <div class="tip-box">
+                    <strong>&#128161; Tip:</strong> If you encounter network issues downloading modules, check your proxy settings. On Windows corporate networks, you may need to configure <code>GOPROXY</code>.
+                </div>
+            </section>
+
+            <!-- 5. Building the Server -->
+            <section id="building">
+                <h2 class="section-title">5. Building the Server</h2>
+                <p>Build the Go backend into a standalone executable:</p>
+                <pre><code>cd backend
+go build -o server.exe .</code></pre>
+                <p>This compiles the application and produces <code>server.exe</code> (or <code>server</code> on Linux/macOS) in the <code>backend/</code> directory.</p>
+
+                <h5 class="mt-3">Build Flags</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>-o server.exe</code></td><td>Sets the output binary name (optional, defaults to directory name)</td></tr>
+                        <tr><td><code>-ldflags "-s -w"</code></td><td>Strips debug symbols for a smaller binary (optional)</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="tip-box">
+                    <strong>&#128161; Tip:</strong> For production use, you can build with stripped symbols: <code>go build -ldflags "-s -w" -o server.exe .</code>
+                </div>
+            </section>
+
+            <!-- 6. Running the Application -->
+            <section id="running">
+                <h2 class="section-title">6. Running the Application</h2>
+                <ol class="step-list">
+                    <li>Navigate to the backend directory (where the binary is located):
+                        <pre><code>cd backend</code></pre>
+                    </li>
+                    <li>Start the server:
+                        <pre><code>./server.exe</code></pre>
+                        On Windows cmd, you can also use:
+                        <pre><code>server.exe</code></pre>
+                    </li>
+                    <li>You should see output like:
+                        <pre><code>Starting server on :8080</code></pre>
+                    </li>
+                    <li>Open your browser and navigate to <code>http://localhost:8080</code></li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>&#9888; Important:</strong> The server must be run from the <code>backend/</code> directory (or you must adjust paths) because it uses relative paths for data files (<code>data/customers.json</code>) and static file serving (<code>../frontend</code>).
+                </div>
+
+                <h5 class="mt-3">Stopping the Server</h5>
+                <p>Press <strong>Ctrl+C</strong> in the terminal to gracefully shut down the server.</p>
+            </section>
+
+            <!-- 7. Configuration -->
+            <section id="configuration">
+                <h2 class="section-title">7. Configuration</h2>
+
+                <div class="alert alert-info">
+                    <strong>&#128218; Configuration File:</strong> The application uses <code>backend/config.json</code> for runtime configuration. Create or edit this file to customize server behavior without recompiling.
+                </div>
+
+                <h5 class="mt-3">Setting Up config.json</h5>
+                <p>The <code>config.json</code> file must be placed in the <code>backend/</code> directory (same level as <code>main.go</code>). If it does not exist, create it with the following structure:</p>
+                <pre><code>{
+  "port": "8080"
+}</code></pre>
+
+                <h6 class="mt-3">Configuration Options</h6>
+                <table class="table table-bordered">
+                    <thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><code>port</code></td>
+                            <td>string</td>
+                            <td><code>"8080"</code></td>
+                            <td>The TCP port the server listens on. Use any available port between 1024-65535 for non-privileged access.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h6 class="mt-3">Example Configurations</h6>
+                <div class="accordion" id="configExamples">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#defaultConfig">
+                                Default Configuration
+                            </button>
+                        </h2>
+                        <div id="defaultConfig" class="accordion-collapse collapse show" data-bs-parent="#configExamples">
+                            <div class="accordion-body">
+                                <pre><code>{
+  "port": "8080"
+}</code></pre>
+                                <p class="mb-0">Standard setup for local development. Server will be accessible at <code>http://localhost:8080</code>.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#prodConfig">
+                                Production Configuration (Custom Port)
+                            </button>
+                        </h2>
+                        <div id="prodConfig" class="accordion-collapse collapse" data-bs-parent="#configExamples">
+                            <div class="accordion-body">
+                                <pre><code>{
+  "port": "8443"
+}</code></pre>
+                                <p class="mb-0">Use a non-standard port for production deployments to avoid conflicts with other services.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box mt-3">
+                    <strong>&#128161; Tip:</strong> The server reads <code>config.json</code> on startup. If the file is missing or contains invalid JSON, the server will exit with an error. Always validate your JSON syntax before restarting the server.
+                </div>
+
+                <div class="warning-box mt-3">
+                    <strong>&#9888; Important:</strong> The <code>port</code> value must be a string (enclosed in quotes), not a number. Using <code>"port": 8080</code> instead of <code>"port": "8080"</code> will cause a parsing error.
+                </div>
+
+                <h5 class="mt-4">Data File Paths</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>File</th><th>Default Path (relative to backend/)</th><th>Purpose</th></tr></thead>
+                    <tbody>
+                        <tr><td>customers.json</td><td><code>data/customers.json</code></td><td>Main customer database</td></tr>
+                        <tr><td>licenses.json</td><td><code>data/licenses.json</code></td><td>License tracking data</td></tr>
+                    </tbody>
+                </table>
+                <p>These paths are set in <code>backend/main.go</code>. The files are auto-created on first server start if they do not exist.</p>
+
+                <h5 class="mt-3">Static File Serving</h5>
+                <p>The frontend is served from the <code>frontend/</code> directory (one level above backend). This path is configured in <code>main.go</code>:</p>
+                <pre><code>r.Handle("/*", http.FileServer(http.Dir("../frontend")))</code></pre>
+
+                <h5 class="mt-3">Pagination Size</h5>
+                <p>The default page size is <strong>50 records per page</strong>. To change it, edit the <code>limit</code> property in <code>frontend/js/customerTable.js</code>:</p>
+                <pre><code>const CustomerTable = {
+    currentPage: 1,
+    limit: 50,   // Change this value
+    currentSearch: '',
+    ...
+};</code></pre>
+
+                <h5 class="mt-3">CORS Settings</h5>
+                <p>Cross-Origin Resource Sharing is enabled by default with permissive settings (allows all origins). The CORS middleware in <code>main.go</code> can be tightened for production:</p>
+                <pre><code>w.Header().Set("Access-Control-Allow-Origin", "*")  // Change "*" to specific domain</code></pre>
+            </section>
+
+            <!-- 8. API Endpoints Reference -->
+            <section id="api-reference">
+                <h2 class="section-title">8. API Endpoints Reference</h2>
+                <p>All API endpoints are prefixed with <code>/api/</code>. The base URL when running locally is <code>http://localhost:8080/api/</code>.</p>
+
+                <h5 class="mt-3">Customer Endpoints</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><code>GET</code></td>
+                            <td><code>/api/customers?search=query&page=1&limit=50</code></td>
+                            <td>List customers with optional search and pagination. Returns a JSON object with <code>customers</code> array, <code>total</code>, <code>page</code>, and <code>limit</code>.</td>
+                        </tr>
+                        <tr>
+                            <td><code>GET</code></td>
+                            <td><code>/api/customers/:id</code></td>
+                            <td>Get a single customer by UUID. Returns the customer JSON object or 404.</td>
+                        </tr>
+                        <tr>
+                            <td><code>POST</code></td>
+                            <td><code>/api/customers</code></td>
+                            <td>Create a new customer. Request body: Customer JSON (without id). Returns the created customer with generated ID.</td>
+                        </tr>
+                        <tr>
+                            <td><code>PUT</code></td>
+                            <td><code>/api/customers/:id</code></td>
+                            <td>Update an existing customer. Request body: Full Customer JSON. Returns the updated customer or 404.</td>
+                        </tr>
+                        <tr>
+                            <td><code>DELETE</code></td>
+                            <td><code>/api/customers/:id</code></td>
+                            <td>Delete a customer by UUID. Returns success message or 404.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5 class="mt-3">License Endpoints</h5>
+                <table class="table table-bordered">
+                    <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><code>GET</code></td>
+                            <td><code>/api/licenses/stats</code></td>
+                            <td>Returns total licenses sold across all customers. Response: <code>{"totalLicenses": 1234}</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h5 class="mt-3">Example API Calls</h5>
+                <pre><code># Search for customers with "ABB" in any field (limit 5)
+curl "http://localhost:8080/api/customers?search=ABB&limit=5"
+
+# Get a specific customer by ID
+curl "http://localhost:8080/api/customers/550e8400-e29b-41d4-a716-446655440000"
+
+# Create a new customer
+curl -X POST "http://localhost:8080/api/customers" \
+  -H "Content-Type: application/json" \
+  -d '{"company":"Acme Corp","name1":"John Doe","email":"john@acme.com"}'
+
+# Get license statistics
+curl "http://localhost:8080/api/licenses/stats"</code></pre>
+            </section>
+
+            <!-- 9. Troubleshooting -->
+            <section id="troubleshooting">
+                <h2 class="section-title">9. Troubleshooting</h2>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">Port Already in Use</div>
+                    <div class="card-body">
+                        <p><strong>Symptom:</strong> Server fails to start with error "listen tcp 127.0.0.1:8080: bind: Only one usage of each socket address..."</p>
+                        <p><strong>Solution:</strong> Another process is using port 8080. Either stop the other process or change the server port in <code>main.go</code>.</p>
+                        <pre><code># On Windows, find what's using port 8080:
+netstat -ano | findstr :8080
+
+# Then taskkill the process or choose a different port.</code></pre>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">Go Module Download Fails</div>
+                    <div class="card-body">
+                        <p><strong>Symptom:</strong> Build fails with "module not found" or network timeout errors.</p>
+                        <p><strong>Solution:</strong></p>
+                        <ul>
+                            <li>Check your internet connection</li>
+                            <li>If behind a corporate proxy, set environment variables:
+                                <pre><code>$env:HTTP_PROXY = "http://proxy.company.com:8080"
+$env:HTTPS_PROXY = "http://proxy.company.com:8080"</code></pre>
+                            </li>
+                            <li>Try running <code>go mod tidy</code> to refresh dependencies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">Frontend Not Loading (404)</div>
+                    <div class="card-body">
+                        <p><strong>Symptom:</strong> API works but navigating to <code>http://localhost:8080</code> returns 404.</p>
+                        <p><strong>Solution:</strong> Ensure the server is run from the <code>backend/</code> directory so that the relative path <code>../frontend</code> resolves correctly. Verify the <code>frontend/</code> directory exists and contains <code>index.html</code>.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header fw-bold">Permission Denied on Data Files</div>
+                    <div class="card-body">
+                        <p><strong>Symptom:</strong> Server fails to start or cannot save changes.</p>
+                        <p><strong>Solution:</strong> Ensure the user running the server has read/write permissions on the <code>backend/data/</code> directory. On Windows, right-click the folder &rarr; Properties &rarr; Security and verify permissions.</p>
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Getting Help</h5>
+                <p>If you encounter issues not covered here:</p>
+                <ul>
+                    <li>Check the server terminal output for error messages and stack traces</li>
+                    <li>Review the browser console (F12 &rarr; Console) for frontend JavaScript errors</li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">&copy; 2026 Customers Database &mdash; Setup Manual v1.0</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
