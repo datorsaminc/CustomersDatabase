@@ -3,7 +3,7 @@
 [![Go Version](https://img.shields.io/badge/Go-1.25%2B-00ADD8?style=flat-square&logo=go)](https://go.dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-A web-based customer database management system built with Go and Bootstrap 5. Originally migrated from Excel XML data to a modern JSON-backed REST API, providing full CRUD operations and real-time search capabilities through a responsive frontend.
+A web-based customer database management system built with Go and Bootstrap 5, using a modern JSON-backed REST API, providing full CRUD operations and real-time search capabilities through a responsive frontend.
 
 ## Table of Contents
 
